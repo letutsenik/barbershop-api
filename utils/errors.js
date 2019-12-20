@@ -27,3 +27,7 @@ export class RequiredParameterError extends Error {
     }
   }
 }
+
+export const makeHttpError = ({ statusCode, errorMessage}) => {
+  return { statusCode, errorMessage}
+};

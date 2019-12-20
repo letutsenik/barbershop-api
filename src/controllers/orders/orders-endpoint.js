@@ -5,14 +5,14 @@ import {
   makeHttpError
 } from '../../../utils/errors'
 
-export const makeMasterEndpointHandler = ({ masters }) => {
+export const makeOrderEndpointHandler = ({ orders }) => {
   return async function handle (httpRequest) {
     switch (httpRequest.method) {
       case 'POST':
-        return postMaster(httpRequest);
+        return postOrder(httpRequest);
 
       case 'GET':
-        return getMasters(httpRequest);
+        return getOrders(httpRequest);
 
       default:
         return makeHttpError({
@@ -22,9 +22,9 @@ export const makeMasterEndpointHandler = ({ masters }) => {
     }
   };
 
-  async function getMasters (httpRequest) {
+  async function getOrders (httpRequest) {
     const { id } = httpRequest.pathParams || {};
-    const result = await masters.getItems();
+    const result = await orders.getItems();
     return {
       headers: {
         'Content-Type': 'application/json'
@@ -34,9 +34,9 @@ export const makeMasterEndpointHandler = ({ masters }) => {
     }
   }
 
-  async function postMaster (httpRequest) {
-    let masterInfo = httpRequest.body;
-    if (!masterInfo) {
+  async function postOrder (httpRequest) {
+    let orderInfo = httpRequest.body;
+    if (!orderInfo) {
       return makeHttpError({
         statusCode: 400,
         errorMessage: 'Bad request. No POST body.'
@@ -45,7 +45,7 @@ export const makeMasterEndpointHandler = ({ masters }) => {
 
     if (typeof httpRequest.body === 'string') {
       try {
-        masterInfo = JSON.parse(masterInfo)
+        orderInfo = JSON.parse(orderInfo)
       } catch {
         return makeHttpError({
           statusCode: 400,
@@ -55,7 +55,7 @@ export const makeMasterEndpointHandler = ({ masters }) => {
     }
 
     try {
-      const result = await masters.add(masterInfo);
+      const result = await orders.add(orderInfo);
       return {
         headers: {
           'Content-Type': 'application/json'

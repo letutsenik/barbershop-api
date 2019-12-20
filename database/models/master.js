@@ -13,5 +13,17 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE',
     });
   };
+
+  Master.addScope(
+    'withOrders',
+    () => ({
+      include: [
+        {
+          model: sequelize.models.Order,
+          as: 'orders'
+        }
+      ]
+    })
+  );
   return Master;
 };

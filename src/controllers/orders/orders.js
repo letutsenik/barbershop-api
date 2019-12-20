@@ -1,15 +1,15 @@
-export const makeMasters = ({ database }) => {
+export const makeOrders = ({ database }) => {
   return Object.freeze({
     add,
     getItems,
   });
 
-  async function add (master) {
+  async function add (order) {
     try {
-      const master =  await database.models.Master.create(master);
+      const order =  await database.models.Order.create(order);
       return {
         success: true,
-        created: master
+        created: order
       }
     } catch (error) {
       return {
@@ -20,10 +20,10 @@ export const makeMasters = ({ database }) => {
   }
   async function getItems () {
     try {
-      const masters = await database.models.Master.scope(['withOrders']).findAll();
+      const orders = await database.models.Order.scope(['withMaster']).findAll();
       return {
         success: true,
-        data: masters
+        data: orders
       }
     } catch (error) {
       return {

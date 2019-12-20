@@ -1,16 +1,16 @@
 import { adaptRequest } from '../../../utils'
 
 import { makeDb } from '../../../database';
-import { makeMasters } from './masters';
-import { makeMasterEndpointHandler } from './masters-endpoint'
+import { makeOrders } from './orders';
+import { makeOrderEndpointHandler } from './orders-endpoint'
 
 const database = makeDb();
-const masters = makeMasters({ database });
-const handleMasterRequest = makeMasterEndpointHandler({ masters });
+const orders = makeOrders({ database });
+const handleOrderRequest = makeOrderEndpointHandler({ orders });
 
-export const masterController = (req, res) => {
+export const orderController = (req, res) => {
   const httpRequest = adaptRequest(req);
-  handleMasterRequest(httpRequest)
+  handleOrderRequest(httpRequest)
     .then(({ headers, statusCode, data }) =>
       res
         .set(headers)

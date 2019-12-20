@@ -11,7 +11,19 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'masterId',
       as: 'master',
       onDelete: 'CASCADE',
-    })
+    });
+
+    Order.addScope(
+      'withMaster',
+      () => ({
+        include: [
+          {
+            model: sequelize.models.Master,
+            as: 'master'
+          }
+        ]
+      })
+    );
   };
   return Order;
 };
