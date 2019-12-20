@@ -1,14 +1,21 @@
+import {
+  UniqueConstraintError,
+  InvalidPropertyError,
+  RequiredParameterError
+} from '../../../utils/errors'
 
-const makeHttpError = ({ statusCode, errorMessage}) => {};
+const makeHttpError = ({ statusCode, errorMessage}) => {
+  return { statusCode, errorMessage}
+};
 
 export const makeMasterEndpointHandler = ({ masters }) => {
   return async function handle (httpRequest) {
     switch (httpRequest.method) {
       case 'POST':
-        return postContact(httpRequest);
+        return postMaster(httpRequest);
 
       case 'GET':
-        return getContacts(httpRequest);
+        return getMasters(httpRequest);
 
       default:
         return makeHttpError({
@@ -18,7 +25,7 @@ export const makeMasterEndpointHandler = ({ masters }) => {
     }
   };
 
-  async function getContacts (httpRequest) {
+  async function getMasters (httpRequest) {
     const { id } = httpRequest.pathParams || {};
     const result = await masters.getItems();
     return {
@@ -30,7 +37,7 @@ export const makeMasterEndpointHandler = ({ masters }) => {
     }
   }
 
-  async function postContact (httpRequest) {
+  async function postMaster (httpRequest) {
     let masterInfo = httpRequest.body;
     if (!masterInfo) {
       return makeHttpError({
@@ -41,7 +48,7 @@ export const makeMasterEndpointHandler = ({ masters }) => {
 
     if (typeof httpRequest.body === 'string') {
       try {
-        masterInfo = JSON.parse(contactInfo)
+        masterInfo = JSON.parse(masterInfo)
       } catch {
         return makeHttpError({
           statusCode: 400,
