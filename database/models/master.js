@@ -1,7 +1,8 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Master = sequelize.define('Master', {
-    name: DataTypes.STRING,
+    firstName: DataTypes.STRING,
+    lastName: DataTypes.STRING,
     email: DataTypes.STRING,
     password: DataTypes.STRING
   }, {});
@@ -12,6 +13,8 @@ module.exports = (sequelize, DataTypes) => {
       as: 'orders',
       onDelete: 'CASCADE',
     });
+
+    Master.belongsToMany(models.Company, { through: 'CompanyMaster'})
   };
 
   Master.addScope(
