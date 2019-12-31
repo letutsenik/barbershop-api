@@ -7,14 +7,13 @@ module.exports = (sequelize, DataTypes) => {
     password: DataTypes.STRING
   }, {});
   Master.associate = function(models) {
-    // associations can be defined here
     Master.hasMany(models.Order, {
       foreignKey: 'masterId',
       as: 'orders',
       onDelete: 'CASCADE',
     });
 
-    Master.belongsToMany(models.Company, { through: 'CompanyMaster'})
+    Master.belongsToMany(models.Company, { through: 'CompanyMaster', as: 'companies' })
   };
 
   Master.addScope(

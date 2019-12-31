@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     description: DataTypes.STRING
   }, {});
   Company.associate = function(models) {
-    Company.belongsToMany(models.Master, { through: 'CompanyMaster'})
+    Company.belongsToMany(models.Master, { through: 'CompanyMaster', as: 'masters' })
   };
   return Company;
 };

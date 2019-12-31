@@ -18,9 +18,9 @@ export const makeMasters = ({ database }) => {
       }
     }
   }
-  async function getItems () {
+  async function getItems (param) {
     try {
-      const masters = await database.models.Master.scope(['withOrders']).findAll();
+      const masters = await database.models.Master.scope(['withOrders']).findAll(param);
       return {
         success: true,
         data: masters
