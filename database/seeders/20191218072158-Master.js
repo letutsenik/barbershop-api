@@ -11,6 +11,22 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
+        {
+          firstName: 'Bob',
+          lastName: 'Marley',
+          email: 'bob@mail.com',
+          password: 'password',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          firstName: 'Sam',
+          lastName: 'Samov',
+          email: 'sam@mail.com',
+          password: 'password',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ], {});
   },
 

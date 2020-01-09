@@ -10,6 +10,18 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
+      {
+        title: 'Cut-Cut',
+        description: 'Another cool barbershop',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        title: 'Vzik-vzik',
+        description: 'Another one cool barbershop',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
     ],
     {},
   ),
