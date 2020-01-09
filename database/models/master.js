@@ -13,7 +13,12 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE',
     });
 
-    Master.belongsToMany(models.Company, { through: 'CompanyMaster', as: 'companies' })
+    Master.belongsToMany(models.Company, {
+      as: 'workCompanies',
+      through: sequelize.models.CompanyMaster,
+      foreignKey: "masterId",
+      otherKey   : 'companyId'
+    })
   };
 
   Master.addScope(
@@ -23,6 +28,17 @@ module.exports = (sequelize, DataTypes) => {
         {
           model: sequelize.models.Order,
           as: 'orders'
+        }
+      ]
+    })
+  );
+  Master.addScope(
+    'withCompanies',
+    () => ({
+      include: [
+        {
+          model: sequelize.models.Company,
+          as: 'workCompanies'
         }
       ]
     })

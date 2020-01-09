@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       references: {
         model: 'Company',
-        key: 'id'
+        key: 'companyId'
       }
     },
     masterId: {
@@ -14,12 +14,21 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       references: {
         model: 'Master',
-        key: 'id'
+        key: 'masterId'
       }
     },
-  }, {});
+  }, {
+    freezeTableName: true,
+  });
   CompanyMaster.associate = function(models) {
-    // associations can be defined here
+    CompanyMaster.belongsTo(models.Master, {
+      foreignKey: 'masterId',
+      as: 'master'
+    });
+    CompanyMaster.belongsTo(models.Company, {
+      foreignKey: 'companyId',
+      as: 'company'
+    });
   };
   return CompanyMaster;
 };

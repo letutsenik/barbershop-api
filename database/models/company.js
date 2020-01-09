@@ -5,7 +5,12 @@ module.exports = (sequelize, DataTypes) => {
     description: DataTypes.STRING
   }, {});
   Company.associate = function(models) {
-    Company.belongsToMany(models.Master, { through: 'CompanyMaster', as: 'masters' })
+    Company.belongsToMany(models.Master, {
+      as: 'masters',
+      through: sequelize.models.CompanyMaster,
+      foreignKey: "companyId",
+      otherKey   : 'masterId',
+    })
   };
   return Company;
 };
