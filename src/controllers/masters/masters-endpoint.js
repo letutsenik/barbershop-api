@@ -5,6 +5,8 @@ import {
   makeHttpError
 } from '../../../utils/errors'
 
+import { makeMaster } from './master'
+
 export const makeMasterEndpointHandler = ({ masters }) => {
   return async function handle (httpRequest) {
     switch (httpRequest.method) {
@@ -35,7 +37,9 @@ export const makeMasterEndpointHandler = ({ masters }) => {
   }
 
   async function postMaster (httpRequest) {
+    console.log('===postMaster===')
     let masterInfo = httpRequest.body;
+    console.log('masterInfo', masterInfo)
     if (!masterInfo) {
       return makeHttpError({
         statusCode: 400,
@@ -55,7 +59,11 @@ export const makeMasterEndpointHandler = ({ masters }) => {
     }
 
     try {
-      const result = await masters.add(masterInfo);
+      console.log('try to create master', masterInfo)
+      masterInfo = JSON.parse(masterInfo);
+      console.log('masterInfo parsed', masterInfo)
+      const master = makeMaster(masterInfo);
+      const result = await masters.add(master);
       return {
         headers: {
           'Content-Type': 'application/json'
