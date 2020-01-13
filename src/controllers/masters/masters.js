@@ -4,9 +4,9 @@ export const makeMasters = ({ database }) => {
     getItems,
   });
 
-  async function add (master) {
+  async function add (masterInfo) {
     try {
-      const master =  await database.models.Master.create(master);
+      const master = await database.models.Master.create(masterInfo);
       return {
         success: true,
         created: master

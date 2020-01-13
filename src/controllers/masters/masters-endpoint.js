@@ -37,9 +37,7 @@ export const makeMasterEndpointHandler = ({ masters }) => {
   }
 
   async function postMaster (httpRequest) {
-    console.log('===postMaster===')
     let masterInfo = httpRequest.body;
-    console.log('masterInfo', masterInfo)
     if (!masterInfo) {
       return makeHttpError({
         statusCode: 400,
@@ -59,9 +57,6 @@ export const makeMasterEndpointHandler = ({ masters }) => {
     }
 
     try {
-      console.log('try to create master', masterInfo)
-      masterInfo = JSON.parse(masterInfo);
-      console.log('masterInfo parsed', masterInfo)
       const master = makeMaster(masterInfo);
       const result = await masters.add(master);
       return {

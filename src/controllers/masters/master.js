@@ -11,14 +11,14 @@ export function makeMaster (masterInfo = requiredParam('masterInfo')) {
   function validate ({
                        firstName = requiredParam('firstName'),
                        lastName = requiredParam('lastName'),
-                       emailAddress = requiredParam('email'),
+                       email = requiredParam('email'),
                        password = requiredParam('password'),
                        ...otherInfo
                      } = {}) {
     validateName('first', firstName);
     validateName('last', lastName);
-    validateEmail(emailAddress);
-    return { firstName, lastName, emailAddress, password, ...otherInfo }
+    validateEmail(email);
+    return { firstName, lastName, email, password, ...otherInfo }
   }
 
   function validateName (label, name) {
@@ -35,12 +35,12 @@ export function makeMaster (masterInfo = requiredParam('masterInfo')) {
     }
   }
 
-  function normalize ({ emailAddress, firstName, lastName, password, ...otherInfo }) {
+  function normalize ({ email, firstName, lastName, password, ...otherInfo }) {
     return {
       ...otherInfo,
       firstName: upperFirst(firstName),
       lastName: upperFirst(lastName),
-      email: emailAddress.toLowerCase(),
+      email: email.toLowerCase(),
       password
     }
   }
