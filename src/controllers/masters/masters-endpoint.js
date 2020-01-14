@@ -59,6 +59,7 @@ export const makeMasterEndpointHandler = ({ masters }) => {
     try {
       const master = makeMaster(masterInfo);
       const result = await masters.add(master);
+      console.log('result', result)
       return {
         headers: {
           'Content-Type': 'application/json'

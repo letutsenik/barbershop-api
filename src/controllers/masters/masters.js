@@ -1,4 +1,4 @@
-export const makeMasters = ({ database }) => {
+export const makeMasters = ({ database, errorHandler }) => {
   return Object.freeze({
     add,
     getItems,
@@ -12,6 +12,7 @@ export const makeMasters = ({ database }) => {
         created: master
       }
     } catch (error) {
+      errorHandler(error);
       return {
         success: false,
         error: error.message

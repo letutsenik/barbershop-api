@@ -3,7 +3,10 @@ module.exports = (sequelize, DataTypes) => {
   const Master = sequelize.define('Master', {
     firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,
-    email: DataTypes.STRING,
+    email: {
+      type: DataTypes.STRING,
+      unique: true
+    },
     password: DataTypes.STRING
   }, {});
   Master.associate = function(models) {

@@ -29,5 +29,6 @@ export class RequiredParameterError extends Error {
 }
 
 export const makeHttpError = ({ statusCode, errorMessage}) => {
+  console.log('makeHttpError')
   return { statusCode, errorMessage}
 };
