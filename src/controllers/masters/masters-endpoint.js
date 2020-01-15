@@ -2,6 +2,7 @@ import {
   UniqueConstraintError,
   InvalidPropertyError,
   RequiredParameterError,
+  NotFoundElementError,
   makeHttpError
 } from '../../../utils/errors'
 
@@ -26,13 +27,22 @@ export const makeMasterEndpointHandler = ({ masters }) => {
 
   async function getMasters (httpRequest) {
     const { id } = httpRequest.pathParams || {};
-    const result = await masters.getItems();
-    return {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      statusCode: 200,
-      data: JSON.stringify(result)
+    try {
+      const result = id
+        ? await masters.getItemById(id)
+        : await masters.getItems();
+      return {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        statusCode: 200,
+        data: JSON.stringify(result)
+      }
+    } catch (e) {
+      return makeHttpError({
+        errorMessage: e.message,
+        statusCode: getStatusCode(e)
+      })
     }
   }
 
@@ -59,7 +69,6 @@ export const makeMasterEndpointHandler = ({ masters }) => {
     try {
       const master = makeMaster(masterInfo);
       const result = await masters.add(master);
-      console.log('result', result)
       return {
         headers: {
           'Content-Type': 'application/json'
@@ -70,14 +79,15 @@ export const makeMasterEndpointHandler = ({ masters }) => {
     } catch (e) {
       return makeHttpError({
         errorMessage: e.message,
-        statusCode:
-          e instanceof UniqueConstraintError
-            ? 409
-            : e instanceof InvalidPropertyError ||
-            e instanceof RequiredParameterError
-            ? 400
-            : 500
+        statusCode: getStatusCode(e)
       })
     }
   }
+};
+
+const getStatusCode = (error) => {
+  if (error instanceof UniqueConstraintError) return 409;
+  if (error instanceof InvalidPropertyError || error instanceof RequiredParameterError) return 400;
+  if (error instanceof NotFoundElementError) return 404;
+  return 500;
 };

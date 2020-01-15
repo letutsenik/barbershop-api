@@ -1,7 +1,10 @@
+import { notFoundElement } from '../../../utils/notFoundElement';
+
 export const makeMasters = ({ database, errorHandler }) => {
   return Object.freeze({
     add,
     getItems,
+    getItemById,
   });
 
   async function add (masterInfo) {
@@ -12,7 +15,7 @@ export const makeMasters = ({ database, errorHandler }) => {
         created: master
       }
     } catch (error) {
-      errorHandler(error);
+      errorHandler(error); // TODO: Should be updated
       return {
         success: false,
         error: error.message
@@ -25,6 +28,25 @@ export const makeMasters = ({ database, errorHandler }) => {
       return {
         success: true,
         data: masters
+      }
+    } catch (error) {
+      errorHandler(error);  // TODO: Should be updated
+      return {
+        success: false,
+        error: error.message
+      }
+    }
+  }
+
+  async function getItemById (id) {
+    try {
+      const master = await database.models.Master
+        .scope(['withOrders', 'withCompanies'])
+        .findByPk(id)
+        || notFoundElement(id);
+      return {
+        success: true,
+        data: master
       }
     } catch (error) {
       return {

@@ -28,7 +28,16 @@ export class RequiredParameterError extends Error {
   }
 }
 
+export class NotFoundElementError extends Error {
+  constructor (elementId) {
+    super(`Element with id: ${elementId} not found.`);
+
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, RequiredParameterError)
+    }
+  }
+}
+
 export const makeHttpError = ({ statusCode, errorMessage}) => {
-  console.log('makeHttpError')
   return { statusCode, errorMessage}
 };
