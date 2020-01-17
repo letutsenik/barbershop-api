@@ -20,28 +20,44 @@ export function makeMaster (masterInfo = requiredParam('masterInfo')) {
     validateEmail(email);
     return { firstName, lastName, email, password, ...otherInfo }
   }
+}
 
-  function validateName (label, name) {
-    if (name.length < 2) {
-      throw new InvalidPropertyError(
-        `A contact's ${label} name must be at least 2 characters long.`
-      )
-    }
+function validateName (label, name) {
+  if (name.length < 2) {
+    throw new InvalidPropertyError(
+      `A contact's ${label} name must be at least 2 characters long.`
+    )
+  }
+}
+
+function validateEmail (emailAddress) {
+  if (!isValidEmail(emailAddress)) {
+    throw new InvalidPropertyError('Invalid contact email address.')
+  }
+}
+
+function normalize ({ email, firstName, lastName, password, ...otherInfo }) {
+  return {
+    ...otherInfo,
+    firstName: upperFirst(firstName),
+    lastName: upperFirst(lastName),
+    email: email.toLowerCase(),
+    password
+  }
+}
+
+export function validateMaster (masterInfo = requiredParam('masterInfo')) {
+  const { firstName, lastName, email, password, ...otherInfo } = masterInfo;
+  if (firstName) {
+    validateName('first', firstName);
+  }
+  if (lastName) {
+    validateName('last', lastName);
+  }
+  if (email) {
+    validateEmail(email);
   }
 
-  function validateEmail (emailAddress) {
-    if (!isValidEmail(emailAddress)) {
-      throw new InvalidPropertyError('Invalid contact email address.')
-    }
-  }
-
-  function normalize ({ email, firstName, lastName, password, ...otherInfo }) {
-    return {
-      ...otherInfo,
-      firstName: upperFirst(firstName),
-      lastName: upperFirst(lastName),
-      email: email.toLowerCase(),
-      password
-    }
-  }
+  const normalMaster = normalize(masterInfo);
+  return Object.freeze(normalMaster);
 }

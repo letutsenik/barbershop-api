@@ -6,8 +6,6 @@ import {
   makeHttpError
 } from '../../../utils/errors'
 
-import { makeMaster } from './master'
-
 export const makeMasterEndpointHandler = ({ masters }) => {
   return async function handle (httpRequest) {
     switch (httpRequest.method) {
@@ -16,6 +14,9 @@ export const makeMasterEndpointHandler = ({ masters }) => {
 
       case 'GET':
         return getMasters(httpRequest);
+
+      case 'PATCH':
+        return updateMaster(httpRequest);
 
       default:
         return makeHttpError({
@@ -29,8 +30,8 @@ export const makeMasterEndpointHandler = ({ masters }) => {
     const { id } = httpRequest.pathParams || {};
     try {
       const result = id
-        ? await masters.getItemById(id)
-        : await masters.getItems();
+        ? await masters.get(id)
+        : await masters.find();
       return {
         headers: {
           'Content-Type': 'application/json'
@@ -67,8 +68,7 @@ export const makeMasterEndpointHandler = ({ masters }) => {
     }
 
     try {
-      const master = makeMaster(masterInfo);
-      const result = await masters.add(master);
+      const result = await masters.create(masterInfo);
       return {
         headers: {
           'Content-Type': 'application/json'
@@ -83,9 +83,38 @@ export const makeMasterEndpointHandler = ({ masters }) => {
       })
     }
   }
-};
+
+  async function updateMaster (httpRequest) {
+    const { id } = httpRequest.pathParams || {};
+    let masterInfo = httpRequest.body;
+    if (!masterInfo) {
+      return makeHttpError({
+        statusCode: 400,
+        errorMessage: 'Bad request. No POST body.'
+      })
+    }
+
+    try {
+      const result = await masters.update(id, masterInfo);
+      console.log('masterInfo', masterInfo)
+      return {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        statusCode: 200,
+        data: JSON.stringify(result)
+      }
+    } catch (e) {
+      return makeHttpError({
+        errorMessage: e.message,
+        statusCode: getStatusCode(e)
+      })
+    }
+  }
+  };
 
 const getStatusCode = (error) => {
+  console.log('error =>', error)
   if (error instanceof UniqueConstraintError) return 409;
   if (error instanceof InvalidPropertyError || error instanceof RequiredParameterError) return 400;
   if (error instanceof NotFoundElementError) return 404;
