@@ -114,7 +114,6 @@ export const makeMasterEndpointHandler = ({ masters }) => {
   };
 
 const getStatusCode = (error) => {
-  console.log('error =>', error)
   if (error instanceof UniqueConstraintError) return 409;
   if (error instanceof InvalidPropertyError || error instanceof RequiredParameterError) return 400;
   if (error instanceof NotFoundElementError) return 404;
