@@ -96,7 +96,6 @@ export const makeMasterEndpointHandler = ({ masters }) => {
 
     try {
       const result = await masters.update(id, masterInfo);
-      console.log('masterInfo', masterInfo)
       return {
         headers: {
           'Content-Type': 'application/json'
