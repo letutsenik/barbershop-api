@@ -7,6 +7,7 @@ export const makeMasters = ({ database, errorHandler }) => {
 		find,
 		get,
 		update,
+		deleteMaster
 	});
 
 	async function create (masterInfo) {
@@ -68,6 +69,24 @@ export const makeMasters = ({ database, errorHandler }) => {
 			return {
 				success: true,
 				data: updatedMaster
+			};
+		} catch (error) {
+			return {
+				success: false,
+				error: error.message
+			};
+		}
+	}
+
+	async function deleteMaster (id) {
+		try {
+			const master = await database.models.Master.findByPk(id);
+			if (!master) return notFoundElement(id);
+			await master.destroy();
+
+			return {
+				success: true,
+				data: master
 			};
 		} catch (error) {
 			return {

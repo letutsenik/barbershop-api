@@ -37,13 +37,25 @@ function validateEmail (emailAddress) {
 }
 
 function normalize ({ email, firstName, lastName, password, ...otherInfo }) {
-	return {
-		...otherInfo,
-		firstName: upperFirst(firstName),
-		lastName: upperFirst(lastName),
-		email: email.toLowerCase(),
-		password
+	const normalized = {
+		...otherInfo
 	};
+	if (firstName) {
+		normalized.firstName = upperFirst(firstName);
+	}
+	if (lastName) {
+		normalized.lastName = upperFirst(lastName);
+	}
+	if (email) {
+		normalized.email = email.toLowerCase();
+	}
+	if (email) {
+		normalized.email = email.toLowerCase();
+	}
+	if (password) {
+		normalized.password = password;
+	}
+	return normalized;
 }
 
 export function validateMaster (masterInfo = requiredParam('masterInfo')) {

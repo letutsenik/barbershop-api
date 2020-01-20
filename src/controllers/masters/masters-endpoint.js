@@ -18,6 +18,9 @@ export const makeMasterEndpointHandler = ({ masters }) => {
       case 'PATCH':
         return updateMaster(httpRequest);
 
+      case 'DELETE':
+        return deleteMaster(httpRequest);
+
       default:
         return makeHttpError({
           statusCode: 405,
@@ -96,6 +99,26 @@ export const makeMasterEndpointHandler = ({ masters }) => {
 
     try {
       const result = await masters.update(id, masterInfo);
+      return {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        statusCode: 200,
+        data: JSON.stringify(result)
+      }
+    } catch (e) {
+      return makeHttpError({
+        errorMessage: e.message,
+        statusCode: getStatusCode(e)
+      })
+    }
+  }
+
+  async function deleteMaster (httpRequest) {
+    const { id } = httpRequest.pathParams || {};
+
+    try {
+      const result = await masters.deleteMaster(id);
       return {
         headers: {
           'Content-Type': 'application/json'
