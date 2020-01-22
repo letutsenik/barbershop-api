@@ -14,16 +14,13 @@ export const makeMasters = ({ database, errorHandler }) => {
 		try {
 			const master = makeMaster(masterInfo);
 			const result = await database.models.Master.create(master);
+
 			return {
 				success: true,
 				created: result
 			};
 		} catch (error) {
-			errorHandler(error); // TODO: Should be updated
-			return {
-				success: false,
-				error: error.message
-			};
+			errorHandler(error);
 		}
 	}
 	async function find (param) {
@@ -34,11 +31,7 @@ export const makeMasters = ({ database, errorHandler }) => {
 				data: masters
 			};
 		} catch (error) {
-			errorHandler(error);  // TODO: Should be updated
-			return {
-				success: false,
-				error: error.message
-			};
+			errorHandler(error);
 		}
 	}
 
@@ -52,10 +45,7 @@ export const makeMasters = ({ database, errorHandler }) => {
 				data: master
 			};
 		} catch (error) {
-			return {
-				success: false,
-				error: error.message
-			};
+			errorHandler(error);
 		}
 	}
 
@@ -71,10 +61,7 @@ export const makeMasters = ({ database, errorHandler }) => {
 				data: updatedMaster
 			};
 		} catch (error) {
-			return {
-				success: false,
-				error: error.message
-			};
+			errorHandler(error);
 		}
 	}
 
@@ -89,10 +76,7 @@ export const makeMasters = ({ database, errorHandler }) => {
 				data: master
 			};
 		} catch (error) {
-			return {
-				success: false,
-				error: error.message
-			};
+			errorHandler(error);
 		}
 	}
 };

@@ -1,5 +1,5 @@
-import { UniqueConstraintError } from './errors'
+import { UniqueConstraintError } from './errors';
 
 export default function uniqueParam (param) {
-  throw new UniqueConstraintError(param)
+	throw new UniqueConstraintError(param);
 }

@@ -1,5 +1,5 @@
-import { NotFoundElementError } from './errors'
+import { NotFoundElementError } from './errors';
 
 export function notFoundElement (id) {
-  throw new NotFoundElementError(id)
+	throw new NotFoundElementError(id);
 }

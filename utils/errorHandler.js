@@ -1,9 +1,11 @@
 import uniqueParam from './unique-param';
 
 export const errorHandler = (error) => {
-  const { errors = [] } = error;
-  const { message, type, path } = errors[0] || {};
-  if (type === 'unique violation') {
-    uniqueParam(path)
-  }
+	const { name } = error;
+	if (name === 'SequelizeUniqueConstraintError') {
+		const { errors = [] } = error;
+		const { message } = errors[0] || {};
+		return uniqueParam(message);
+	}
+	throw error;
 };
