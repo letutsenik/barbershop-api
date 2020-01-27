@@ -1,8 +1,5 @@
 import {
-  UniqueConstraintError,
-  InvalidPropertyError,
-  RequiredParameterError,
-  NotFoundElementError,
+  getStatusCode,
   makeHttpError
 } from '../../../utils/errors'
 
@@ -54,7 +51,7 @@ export const makeMasterEndpointHandler = ({ masters }) => {
     let masterInfo = httpRequest.body;
     if (!masterInfo) {
       return makeHttpError({
-        statusCode: 400,
+        statusCode: 400,  // TODO: Replace with custom error
         errorMessage: 'Bad request. No POST body.'
       })
     }
@@ -64,7 +61,7 @@ export const makeMasterEndpointHandler = ({ masters }) => {
         masterInfo = JSON.parse(masterInfo)
       } catch {
         return makeHttpError({
-          statusCode: 400,
+          statusCode: 400,  // TODO: Replace with custom error
           errorMessage: 'Bad request. POST body must be valid JSON.'
         })
       }
@@ -134,10 +131,3 @@ export const makeMasterEndpointHandler = ({ masters }) => {
     }
   }
   };
-
-const getStatusCode = (error) => {
-  if (error instanceof UniqueConstraintError) return 409;
-  if (error instanceof InvalidPropertyError || error instanceof RequiredParameterError) return 400;
-  if (error instanceof NotFoundElementError) return 404;
-  return 500;
-};

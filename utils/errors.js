@@ -41,3 +41,11 @@ export class NotFoundElementError extends Error {
 export const makeHttpError = ({ statusCode, errorMessage}) => {
 	return { statusCode, errorMessage};
 };
+
+export const getStatusCode = (error) => {
+	if (error instanceof UniqueConstraintError) return 409;
+	if (error instanceof InvalidPropertyError || error instanceof RequiredParameterError) return 400;
+	if (error instanceof NotFoundElementError) return 404;
+	return 500;
+};
+

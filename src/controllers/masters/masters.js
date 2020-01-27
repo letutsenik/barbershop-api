@@ -23,6 +23,7 @@ export const makeMasters = ({ database, errorHandler }) => {
 			errorHandler(error);
 		}
 	}
+
 	async function find (param) {
 		try {
 			const masters = await database.models.Master.scope(['withOrders', 'withCompanies']).findAll(param);
