@@ -11,6 +11,7 @@ app.use(bodyParser.json());
 
 app.all('/masters', masterController);
 app.all('/masters/:id', masterController);
+
 app.all('/orders', orderController);
 app.all('/orders/:id', orderController);
 
