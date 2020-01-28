@@ -1,7 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 
-import { masterController, orderController } from './src/controllers';
+import { masterController, orderController, companyController } from './src/controllers';
 
 const port = process.env.PORT || 9000;
 
@@ -14,6 +14,9 @@ app.all('/masters/:id', masterController);
 
 app.all('/orders', orderController);
 app.all('/orders/:id', orderController);
+
+app.all('/companies', companyController);
+app.all('/companies/:id', companyController);
 
 app.listen(port,() => {
 	console.log(`app is listening to port ${port}`);

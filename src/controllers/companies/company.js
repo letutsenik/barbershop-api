@@ -3,28 +3,28 @@ import { InvalidPropertyError } from '../../../utils/errors';
 import isNumber from 'lodash/isNumber';
 import upperFirst from '../../../utils/upper-first';
 
-export const makeCompany = (orderInfo = requiredParam('orderInfo')) => {
-	const validOrder = validate(orderInfo);
-	const normalOrder = normalize(validOrder);
-	return Object.freeze(normalOrder);
+export const makeCompany = (companyInfo = requiredParam('companyInfo')) => {
+	const validCompany = validate(companyInfo);
+	const normalCompany = normalize(validCompany);
+	return Object.freeze(normalCompany);
 
 	function validate ({
 		title = requiredParam('title'),
 		description = requiredParam('description'),
-		masterId = requiredParam('masterId'),
+		location = requiredParam('location'),
 		...otherInfo
 	} = {}) {
 		validateTitle('title', title);
 		validateDescription('description', description);
-		validateMasterId(masterId);
-		return { title, description, masterId, ...otherInfo };
+		validateLocation(location);
+		return { title, description, location, ...otherInfo };
 	}
 };
 
 function validateTitle (label, field) {
 	if (field.length > 12) {
 		throw new InvalidPropertyError(
-			`A order's ${label} is too long.`
+			`A company's ${label} is too long.`
 		);
 	}
 }
@@ -32,18 +32,18 @@ function validateTitle (label, field) {
 function validateDescription (label, field) {
 	if (field.length > 30) {
 		throw new InvalidPropertyError(
-			`A order's ${label} is too long.`
+			`A company's ${label} is too long.`
 		);
 	}
 }
 
-function validateMasterId (masterId) {
-	if (!isNumber(masterId)) {
-		throw new InvalidPropertyError('Invalid master Id.');
+function validateLocation (location) {
+	if (isNumber(location)) {
+		throw new InvalidPropertyError('Invalid location.');
 	}
 }
 
-function normalize ({ title, description, masterId, ...otherInfo }) {
+function normalize ({ title, description, location, ...otherInfo }) {
 	const normalized = {
 		...otherInfo
 	};
@@ -53,25 +53,25 @@ function normalize ({ title, description, masterId, ...otherInfo }) {
 	if (description) {
 		normalized.description = upperFirst(description.toLowerCase());
 	}
-	if (masterId) {
-		normalized.masterId = masterId;
+	if (location) {
+		normalized.location = location;
 	}
 
 	return normalized;
 }
 
-export function validateOrder (orderInfo = requiredParam('orderInfo')) {
-	const { title, description, masterId, ...otherInfo } = orderInfo;
+export function validateCompany (companyInfo = requiredParam('companyInfo')) {
+	const { title, description, location, ...otherInfo } = companyInfo;
 	if (title) {
 		validateTitle('title', title);
 	}
 	if (description) {
 		validateDescription('description', description);
 	}
-	if (masterId) {
-		validateMasterId(masterId);
+	if (location) {
+		validateLocation(location);
 	}
 
-	const normalOrder = normalize(orderInfo);
-	return Object.freeze(normalOrder);
+	const normalCompany = normalize(companyInfo);
+	return Object.freeze(normalCompany);
 }

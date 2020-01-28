@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "env-cmd -f ./env/dev.env nodemon --exec babel-node index.js"
+    "dev": "env-cmd -f ./env/dev.env nodemon --exec babel-node index.js",
+    "db:migrate": "env-cmd -f ./env/dev.env sequelize-cli db:migrate"
   },
   "author": "",
   "license": "ISC",
