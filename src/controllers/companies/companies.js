@@ -1,3 +1,4 @@
+import pull from 'lodash/pull';
 import { makeCompany } from './company';
 import { notFoundElement } from '../../../utils/notFoundElement';
 import { validateCompany } from './company';
@@ -9,6 +10,8 @@ export const makeCompanies = ({ database, errorHandler }) => {
 		get,
 		update,
 		deleteCompany,
+		setMaster,
+		deleteMaster,
 	});
 
 	async function create (companyInfo) {
@@ -76,6 +79,46 @@ export const makeCompanies = ({ database, errorHandler }) => {
 			return {
 				success: true,
 				data: company
+			};
+		} catch (error) {
+			errorHandler(error);
+		}
+	}
+
+	async function setMaster (companyId, masterId) {
+		try {
+			const company = await database.models.Company.findByPk(companyId);
+			if (!company) return notFoundElement(companyId);
+
+			const masters = await company.getMasters();
+			const mastersIds = masters.map(master => master.id);
+			await company.setMasters([ ...mastersIds, masterId]);
+			const companyWithMasters = await database.models.Company.scope(['withMasters']).findByPk(companyId);
+			return {
+				success: true,
+				data: companyWithMasters
+			};
+		} catch (error) {
+			errorHandler(error);
+		}
+	}
+
+	async function deleteMaster (companyId, masterId) {
+		try {
+			const company = await database.models.Company.findByPk(companyId);
+			if (!company) return notFoundElement(companyId);
+
+			const masters = await company.getMasters();
+			const mastersIds = masters.map(master => master.id);
+			if (!mastersIds.includes(Number(masterId))) {
+				return notFoundElement(masterId);
+			}
+			const restMastersIds = pull(mastersIds, Number(masterId));
+			await company.setMasters(restMastersIds);
+			const companyWithMasters = await database.models.Company.scope(['withMasters']).findByPk(companyId);
+			return {
+				success: true,
+				data: companyWithMasters
 			};
 		} catch (error) {
 			errorHandler(error);
