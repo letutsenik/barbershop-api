@@ -30,8 +30,8 @@ export const makeMasterEndpointHandler = ({ masters }) => {
     const { id } = httpRequest.pathParams || {};
     try {
       const result = id
-        ? await masters.get(id)
-        : await masters.find();
+        ? await masters.get(id, ['withOrders', 'withCompanies'])
+        : await masters.find({}, ['withOrders', 'withCompanies']);
       return {
         headers: {
           'Content-Type': 'application/json'
