@@ -17,7 +17,7 @@ app.all('/orders/:id', orderController);
 
 app.all('/companies', companyController);
 app.all('/companies/:id', companyController);
-app.all('/companies/:id/masters/:mid', companyMasterController);
+app.all('/companies/:id/masters', companyMasterController);
 
 app.listen(port,() => {
 	console.log(`app is listening to port ${port}`);

@@ -6,7 +6,7 @@ import {
 export const makeCompanyMasterEndpointHandler = ({ companies }) => {
 	return async function handle (httpRequest) {
 		switch (httpRequest.method) {
-		case 'GET':
+		case 'POST':
 			return addMasterToCompany(httpRequest);
 
 		case 'DELETE':
@@ -20,8 +20,28 @@ export const makeCompanyMasterEndpointHandler = ({ companies }) => {
 	};
 
 	async function addMasterToCompany (httpRequest) {
-		const { id: companyId, mid: masterId } = httpRequest.pathParams || {};
+		const { id: companyId } = httpRequest.pathParams || {};
+		let { body } = httpRequest;
+		if (!body) {
+			return makeHttpError({
+				statusCode: 400, // TODO: Replace with custom error
+				errorMessage: 'Bad request. No POST body.'
+			});
+		}
+
+		if (typeof httpRequest.body === 'string') {
+			try {
+				body = JSON.parse(body);
+			} catch(e) {
+				return makeHttpError({
+					statusCode: 400,  // TODO: Replace with custom error
+					errorMessage: 'Bad request. POST body must be valid JSON.'
+				});
+			}
+		}
+
 		try {
+			const { id: masterId } = body;
 			const result = await companies.setMaster(companyId, masterId);
 			return {
 				headers: {
