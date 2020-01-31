@@ -25,7 +25,6 @@ export const makeEntities = ({ EntityName, makeEntity, validateEntity }) => ({ d
 
 	async function find (param, scope) {
 		try {
-			// const masters = await database.models.Master.scope(['withOrders', 'withCompanies']).findAll(param);
 			const entities = await database.models[EntityName].scope(scope).findAll(param);
 			return {
 				success: true,

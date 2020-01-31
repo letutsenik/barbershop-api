@@ -115,7 +115,7 @@ export const makeMasterEndpointHandler = ({ masters }) => {
     const { id } = httpRequest.pathParams || {};
 
     try {
-      const result = await masters.deleteMaster(id);
+      const result = await masters.deleteEntity(id);
       return {
         headers: {
           'Content-Type': 'application/json'

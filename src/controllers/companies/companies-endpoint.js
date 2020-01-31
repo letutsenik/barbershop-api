@@ -30,8 +30,8 @@ export const makeCompanyEndpointHandler = ({ companies }) => {
 		const { id } = httpRequest.pathParams || {};
 		try {
 			const result = id
-				? await companies.get(id)
-				: await companies.find();
+				? await companies.get(id, ['withMasters'])
+				: await companies.find({}, ['withMasters']);
 			return {
 				headers: {
 					'Content-Type': 'application/json'
