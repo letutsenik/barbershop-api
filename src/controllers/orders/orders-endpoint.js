@@ -30,8 +30,8 @@ export const makeOrderEndpointHandler = ({ orders }) => {
 		const { id } = httpRequest.pathParams || {};
 		try {
 			const result = id
-				? await orders.get(id)
-				: await orders.find();
+				? await orders.get(id, ['withMaster'])
+				: await orders.find({}, ['withMaster']);
 			return {
 				headers: {
 					'Content-Type': 'application/json'
@@ -115,7 +115,7 @@ export const makeOrderEndpointHandler = ({ orders }) => {
 		const { id } = httpRequest.pathParams || {};
 
 		try {
-			const result = await orders.deleteOrder(id);
+			const result = await orders.deleteEntity(id);
 			return {
 				headers: {
 					'Content-Type': 'application/json'
